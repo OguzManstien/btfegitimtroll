@@ -1,0 +1,87 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local BTF = Instance.new("ScreenGui")
+local btfframe = Instance.new("Frame")
+local EgitimTroll = Instance.new("TextButton")
+
+--Properties:
+
+BTF.Name = "BTF"
+BTF.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+BTF.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+btfframe.Name = "btfframe"
+btfframe.Parent = BTF
+btfframe.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+btfframe.BorderSizePixel = 0
+btfframe.Position = UDim2.new(0.212871283, 0, 0.208747521, 0)
+btfframe.Size = UDim2.new(0, 284, 0, 153)
+
+EgitimTroll.Name = "Egitim Troll"
+EgitimTroll.Parent = btfframe
+EgitimTroll.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+EgitimTroll.BackgroundTransparency = 0.450
+EgitimTroll.BorderSizePixel = 0
+EgitimTroll.Position = UDim2.new(0.0246478878, 0, 0.0522875823, 0)
+EgitimTroll.Size = UDim2.new(0, 127, 0, 28)
+EgitimTroll.Font = Enum.Font.SourceSans
+EgitimTroll.Text = "Egitim Troll"
+EgitimTroll.TextColor3 = Color3.fromRGB(178, 178, 178)
+EgitimTroll.TextSize = 14.000
+EgitimTroll.MouseButton1Down:connect(function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2894.453, 317.831, -148.355)
+end)
+
+-- Scripts:
+
+local function YQEJ_fake_script() -- btfframe.LocalScript 
+	local script = Instance.new('LocalScript', btfframe)
+
+	local dragger = {}; 
+	local resizer = {};
+	
+	do
+		local mouse = game:GetService("Players").LocalPlayer:GetMouse();
+		local inputService = game:GetService('UserInputService');
+		local heartbeat = game:GetService("RunService").Heartbeat;
+		-- // credits to Ririchi / Inori for this cute drag function :)
+		function dragger.new(frame)
+		    local s, event = pcall(function()
+		    	return frame.MouseEnter
+		    end)
+	
+		    if s then
+		    	frame.Active = true;
+	
+		    	event:connect(function()
+		    		local input = frame.InputBegan:connect(function(key)
+		    			if key.UserInputType == Enum.UserInputType.MouseButton1 then
+		    				local objectPosition = Vector2.new(mouse.X - frame.AbsolutePosition.X, mouse.Y - frame.AbsolutePosition.Y);
+		    				while heartbeat:wait() and inputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+		    					frame:TweenPosition(UDim2.new(0, mouse.X - objectPosition.X + (frame.Size.X.Offset * frame.AnchorPoint.X), 0, mouse.Y - objectPosition.Y + (frame.Size.Y.Offset * frame.AnchorPoint.Y)), 'Out', 'Quad', 0.1, true);
+		    				end
+		    			end
+		    		end)
+	
+		    		local leave;
+		    		leave = frame.MouseLeave:connect(function()
+		    			input:disconnect();
+		    			leave:disconnect();
+		    		end)
+		    	end)
+		    end
+		end
+		
+		function resizer.new(p, s)
+			p:GetPropertyChangedSignal('AbsoluteSize'):connect(function()
+				s.Size = UDim2.new(s.Size.X.Scale, s.Size.X.Offset, s.Size.Y.Scale, p.AbsoluteSize.Y);
+			end)
+		end
+	end
+	script.Parent.Active = true
+	script.Parent.Draggable = true
+end
+coroutine.wrap(YQEJ_fake_script)()
